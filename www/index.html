@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!-- CSP support mode (required for Windows Universal apps): https://docs.angularjs.org/api/ng/directive/ngCsp -->
+<html lang="es_LA" ng-app="myApp" ng-csp>
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- JS dependencies (order matters!) -->
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+    <script src="lib/angular/angular-timeago.js"></script>
+    <script src="lib/angular/angular-resource.js"></script>
+
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components-blue-basic-theme.css" />
+
+    <!-- CSP support mode (required for Windows Universal apps) -->
+    <link rel="stylesheet" href="lib/angular/angular-csp.css" />
+
+
+    <!-- Map -->
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+    <script src="lib/leaflet/leaflet.js"></script>
+    <script src="lib/jquery-2.1.0.min.js"></script>    
+
+    <!-- Custom style -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- --------------- App init --------------- -->
+
+    <title>ReciVeci</title>
+
+    <script>
+        var myApp = angular.module('myApp', ['onsen','ngResource','yaru22.angular-timeago']);
+    </script>
+
+    <!-- Filters -->
+    <script src="scripts/age-filter.js"></script>
+
+    <!--Services -->    
+    <script src="scripts/news-service.js"></script>
+    <script src="scripts/recycling-service.js"></script>
+    <script src="scripts/rates-service.js"></script>
+    <script src="scripts/login-service.js"></script>
+    
+    <!--Controllers -->    
+    <script src="scripts/map-controller.js"></script>
+    <script src="scripts/news-controller.js"></script>
+    <script src="scripts/recycling-controller.js"></script>
+    <script src="scripts/rates-controller.js"></script>
+    <script src="scripts/login-controller.js"></script>
+
+
+
+</head>
+
+<body>
+    <!-- Cordova reference -->
+    <script src="cordova.js"></script>
+    <script src="scripts/index.js"></script>
+    <!-- -->
+
+    
+    <div ng-controller="LoginController">
+  <ons-toolbar fixed-style>
+    <div class="center sectionbar">{{pageTitle}}</div>
+  </ons-toolbar>
+
+  
+  <ons-navigator title="Navigator" var="loginNavigator">
+    <ons-page>
+
+        <div style="text-align: center;">
+            <img class="logo" src="images/logo_impaqto.png"/>
+        </div>
+      
+      <ons-modal var="modal">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+      </ons-modal>
+
+      <div style="text-align: center">
+ 
+            <form>
+              <section style="padding: 12px">
+                <input type="text" class="text-input" ng-model="username" placeholder="Ingrese su código" 
+                style="display: block; width: 100%">
+              </section>
+     
+              <section style="padding: 0 0px 0px">
+                <ons-button modifier="large--cta" ng-click="register(username)" class="searchbutton">Identificate</ons-button>
+              </section>
+
+            </form>
+    </div>
+    </ons-page>
+  </ons-navigator>
+
+  <ons-template id="coworker.html">
+    <ons-page>
+        <div class="left">
+                <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+       <div class="listClass">
+            <ons-list>
+              <ons-list-item class="centered error-connection" ng-hide="success">
+                <ons-icon size="35px" icon="ion-sad-outline"></ons-icon>
+                <div class="profile-message">
+                  Lo sentimos, no haz ingresado código para realizar la búsqueda.            
+                </div>
+              </ons-list-item>
+            </ons-list>
+           
+      </div>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="logout.html">
+    <ons-page>
+
+       <ons-modal var="modal">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+       </ons-modal>
+        <div class="left">
+                <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+
+       <div class="profile-card" ng-hide="!success">
+
+          <img src="images/logo_impaqto.png" class="profile-image">
+          <div class="profile-name">{{consumo.contrato.coworker.nombre}} {{consumo.contrato.coworker.apellido}}</div>
+          <div class="profile-id">{{consumo.contrato.coworker.mail}}</div>
+          <div class="profile-desc">Tienes contratado el plan: {{consumo.contrato.membresia.nombre}}</div>
+
+       </div>
+
+      <div class="listClass">
+            <ons-list>
+              <ons-list-item class="centered error-connection" ng-hide="success">
+                <ons-icon size="35px" icon="ion-sad-outline"></ons-icon>
+                <div class="profile-message">
+                  Lo sentimos, no encontramos datos relacionados con tu Código.            
+                </div>
+              </ons-list-item>
+              <ons-list-item  class="list-item-container" ng-hide="!success">
+                <ons-row>
+                    <ons-col>
+                       
+                        <div class="location">
+                          <ons-icon icon="fa-clock-o"></ons-icon>  Te sobran {{consumo.contrato.tiempo_sobrante}} min.
+                        </div>
+                        <div class="desc">
+                          Tu registro de {{consumo.get_estado_registro_display}} fue exitoso!!. 
+                        </div>
+                         <div class="despedida">
+                          Gracias por estar junto a nosotros.
+                        </div>
+                      
+                    </ons-col>
+                    <ons-col width="40px"></ons-col>
+                </ons-row>
+              </ons-list-item>
+            </ons-list>
+           
+      </div>
+
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+        
+</div>
+
+
+</body>
+</html>

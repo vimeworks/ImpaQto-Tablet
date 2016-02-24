@@ -1,0 +1,99 @@
+<div ng-controller="LoginController">
+  <ons-toolbar fixed-style>
+    <div class="center sectionbar">{{pageTitle}}</div>
+  </ons-toolbar>
+
+  
+  <ons-navigator title="Navigator" var="loginNavigator">
+    <ons-page>
+
+        <div style="text-align: center;">
+            <img class="logo" src="images/logo_impaqto.png"/>
+        </div>
+      
+      <ons-modal var="modal">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+      </ons-modal>
+
+      <div style="text-align: center">
+ 
+            <form>
+              <section style="padding: 12px">
+                <input type="text" class="text-input" ng-model="username" placeholder="Ingrese su código" 
+                style="display: block; width: 100%">
+              </section>
+     
+              <section style="padding: 0 0px 0px">
+                <ons-button modifier="large--cta" ng-click="register(username)" class="searchbutton">Identificate</ons-button>
+              </section>
+
+            </form>
+    </div>
+    </ons-page>
+  </ons-navigator>
+
+  <ons-template id="coworker.html">
+    <ons-page>
+       <div class="recyEntry"> No hay datos</div>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="logout.html">
+    <ons-page>
+
+       <ons-modal var="modal">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+       </ons-modal>
+
+       <div class="profile-card" ng-hide="!success">
+
+          <img src="images/logo_impaqto.png" class="profile-image">
+          <div class="profile-name">{{consumo.contrato.coworker.nombre}} {{consumo.contrato.coworker.apellido}}</div>
+          <div class="profile-id">@davegraham</div>
+          <div class="profile-desc">Freelance designer, software engineer and cyclist</div>
+
+       </div>
+
+      <div class="listClass">
+            <ons-list>
+              <ons-list-item class="centered error-connection" ng-hide="success">
+                <ons-icon size="35px" icon="ion-sad-outline"></ons-icon>
+                <div class="profile-message">
+                  Lo sentimos, no encontramos datos relacionados con tu Código.            
+                </div>
+              </ons-list-item>
+              <ons-list-item  class="list-item-container" ng-hide="!success">
+                <ons-row>
+                    <ons-col>
+                       
+                        <div class="location">
+                          <ons-icon icon="fa-clock-o"></ons-icon>  Te sobran {{consumo.contrato.tiempo_sobrante}} min.
+                        </div>
+                        <div class="desc">
+                          Tu registro de {{consumo.get_estado_registro_display}} fue exitoso!!. 
+                        </div>
+                         <div class="despedida">
+                          Gracias por estar junto a nosotros.
+                        </div>
+                      
+                    </ons-col>
+                    <ons-col width="40px"></ons-col>
+                </ons-row>
+              </ons-list-item>
+            </ons-list>
+      </div>
+
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button ng-click="refreshTitleOrigin();">Regresar</ons-back-button>
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+        
+</div>
